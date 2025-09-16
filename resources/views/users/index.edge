@@ -1,0 +1,65 @@
+{{-- @file resources/views/users/index.edge --}}
+{{-- @description Liste des utilisateurs (Bootstrap) --}}
+@layout.app({ title: "Utilisateurs" })
+
+  @slot('main')
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="h4 mb-0">Utilisateurs</h1>
+      <!-- Placeholder pour actions (ajout, export, filtres) -->
+      <div class="btn-group">
+        <a class="btn btn-sm btn-outline-primary disabled" aria-disabled="true">Ajouter</a>
+        <a class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Exporter</a>
+      </div>
+    </div>
+
+    <div class="card p-3">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Email</th>
+              <th>Nom</th>
+              <th>Actif</th>
+            </tr>
+          </thead>
+          <tbody>
+          @each(user in users.all())
+            <tr>
+              <td class="text-secondary">{{ user.id }}</td>
+              <td class="fw-medium">{{ user.email }}</td>
+              <td>{{ user.fullName }}</td>
+              <td>
+                @if(user.isActive)
+                  <span class="badge text-bg-success">Oui</span>
+                @else
+                  <span class="badge text-bg-secondary">Non</span>
+                @endif
+              </td>
+            </tr>
+          @endeach
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center pt-3">
+        <div class="small text-secondary">
+          Page {{ users.currentPage }} / {{ users.lastPage }}
+        </div>
+        <div class="btn-group">
+          @if(users.hasPrevPage)
+            <a class="btn btn-sm btn-outline-secondary" href="{{ users.previousPageUrl }}">
+              <i class="bi bi-chevron-left"></i> Précédent
+            </a>
+          @endif
+          @if(users.hasNextPage)
+            <a class="btn btn-sm btn-outline-secondary" href="{{ users.nextPageUrl }}">
+              Suivant <i class="bi bi-chevron-right"></i>
+            </a>
+          @endif
+        </div>
+      </div>
+    </div>
+  @endslot
+
+@end

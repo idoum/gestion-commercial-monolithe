@@ -1,0 +1,34 @@
+{{-- @file resources/views/components/layout/auth.edge --}}
+{{-- @description Layout minimal pour les pages d'authentification, Bootstrap local + slots Edge v6 --}}
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ title || "Connexion" }}</title>
+
+    <!-- Bootstrap (local) -->
+    <link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css" />
+    <!-- Bootstrap Icons (local) -->
+    <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.css" />
+    <!-- Styles applicatifs -->
+    <link rel="stylesheet" href="/assets/app.css" />
+
+    @if ($slots.meta)
+      {{{ await $slots.meta() }}}
+    @endif
+  </head>
+
+  <body class="auth-bg">
+    <main class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+      {{{ await $slots.main() }}}
+    </main>
+
+    <!-- Bootstrap bundle (local) -->
+    <script src="/vendor/bootstrap/bootstrap.bundle.min.js" defer></script>
+
+    @if ($slots.scripts)
+      {{{ await $slots.scripts() }}}
+    @endif
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{{-- @file resources/views/layouts/main.edge --}}
+{{-- @description Layout principal (Edge v6) --}}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>@!section('title', 'Gestion Commerciale')</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Tableau de bord</a>
+      <a href="/users">Utilisateurs</a>
+      <form action="/logout" method="post" style="display:inline">
+        {{ csrfField() }}
+        <button type="submit">Déconnexion</button>
+      </form>
+    </nav>
+  </header>
+
+  <main>
+    @!section('content')
+  </main>
+</body>
+</html>

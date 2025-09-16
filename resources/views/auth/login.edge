@@ -1,0 +1,98 @@
+{{-- @file resources/views/auth/login.edge --}}
+{{-- @description Formulaire de connexion “Material-like”, Bootstrap local + helpers CSRF (Adonis v6) --}}
+@layout.auth({ title: "Connexion" })
+
+  @slot('main')
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xxl-5">
+      <div class="material-card p-4 p-md-5">
+        <!-- En-tête -->
+        <div class="text-center mb-4">
+          <div class="fw-semibold fs-4 text-body-emphasis">Sign in</div>
+          <div class="text-secondary">to continue to your account</div>
+        </div>
+
+        <!-- Flash d'erreur -->
+        @if(flashMessages.get('error'))
+          <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>@flash('error')</div>
+          </div>
+        @endif
+
+        <!-- Formulaire -->
+        <form action="/login" method="post" novalidate>
+          {{ csrfField() }}
+
+          <!-- Champ email -->
+          <div class="material-field">
+            <i class="bi bi-envelope material-icon"></i>
+            <input class="material-input" id="email" name="email" type="email" placeholder=" " autocomplete="username" required />
+            <label class="material-label" for="email">Email</label>
+            <span class="material-bar"></span>
+          </div>
+
+          <!-- Champ mot de passe -->
+          <div class="material-field">
+            <i class="bi bi-lock material-icon"></i>
+            <input class="material-input" id="password" name="password" type="password" placeholder=" " autocomplete="current-password" required />
+            <label class="material-label" for="password">Password</label>
+            <span class="material-bar"></span>
+          </div>
+
+          <!-- Options -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input class="form-check-input" id="remember" type="checkbox" name="remember" />
+              <label class="form-check-label" for="remember">Keep me signed in</label>
+            </div>
+            <a class="link-muted small" href="#" aria-disabled="true">Forgot password?</a>
+          </div>
+
+          <!-- Soumission -->
+          <div class="d-grid">
+            <button class="btn btn-primary btn-lg" type="submit">
+              <i class="bi bi-box-arrow-in-right me-1"></i> SIGN IN
+            </button>
+          </div>
+
+          <!-- Séparateur -->
+          <div class="divider text-uppercase small">or</div>
+
+          <!-- Boutons sociaux (visuel uniquement) -->
+          <div class="d-grid gap-2">
+            <button type="button" class="btn btn-google btn-lg">
+              <i class="bi bi-google me-2"></i> Continue with Google
+            </button>
+            <button type="button" class="btn btn-facebook btn-lg">
+              <i class="bi bi-facebook me-2"></i> Continue with Facebook
+            </button>
+          </div>
+
+          <div class="text-center text-secondary small mt-3">
+            Don't have an account? <a class="link-muted" href="#" aria-disabled="true">Create account</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  @endslot
+
+  @slot('scripts')
+    <script>
+      // @file inline
+      // @description Toggle œil sur le mot de passe (si vous ajoutez l'icône dédiée)
+      document.addEventListener('DOMContentLoaded', function () {
+        const pwd = document.getElementById('password')
+        const toggle = document.querySelector('[data-toggle-password]')
+        if (pwd && toggle) {
+          toggle.addEventListener('click', () => {
+            const isPwd = pwd.type === 'password'
+            pwd.type = isPwd ? 'text' : 'password'
+            toggle.classList.toggle('bi-eye')
+            toggle.classList.toggle('bi-eye-slash')
+          })
+        }
+      })
+    </script>
+  @endslot
+
+@end
