@@ -1,0 +1,92 @@
+{{-- @file resources/views/admin/products/index.edge --}}
+{{-- @description Liste des produits (recherche, pagination, actions). --}}
+@layout.app({ title: "Produits" })
+
+  @slot('main')
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="h4 mb-0">Produits</h1>
+      <a class="btn btn-primary" href="/admin/products/create">
+        <i class="bi bi-plus-lg me-1"></i> Nouveau produit
+      </a>
+    </div>
+
+    <form class="row g-2 mb-3" method="get" action="/admin/products">
+      <div class="col-sm-6 col-md-4">
+        <input class="form-control" type="search" name="q" placeholder="Rechercher par nom ou SKU" value="{{ q || '' }}" />
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </form>
+
+    <div class="card p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>SKU</th>
+              <th>Nom</th>
+              <th>Catégorie</th>
+              <th>Unité</th>
+              <th>Prix HT</th>
+              <th>Stock</th>
+              <th>Actif</th>
+              <th style="width:140px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @each(p in products.all())
+              <tr>
+                <td class="text-secondary">{{ p.id }}</td>
+                <td class="font-monospace">{{ p.sku }}</td>
+                <td class="fw-medium">{{ p.name }}</td>
+                <td>{{ p.category?.name }}</td>
+                <td>{{ p.unit?.code }}</td>
+                <td>{{ p.priceHt }}</td>
+                <td>{{ p.stockQty }}</td>
+                <td>
+                  @if(p.isActive)
+                    <span class="badge text-bg-success">Oui</span>
+                  @else
+                    <span class="badge text-bg-secondary">Non</span>
+                  @endif
+                </td>
+                <td class="text-end">
+                  <a class="btn btn-sm btn-outline-secondary" href="/admin/products/{{ p.id }}/edit">
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+                  <form action="/admin/products/{{ p.id }}" method="post" class="d-inline" onsubmit="return confirm('Supprimer ce produit ?')">
+                    {{ csrfField() }}
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button class="btn btn-sm btn-outline-danger" type="submit">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            @endeach
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="small text-secondary">
+          Page {{ products.currentPage }} / {{ products.lastPage }}
+        </div>
+        <div class="btn-group">
+          @if(products.hasPrevPage)
+            <a class="btn btn-sm btn-outline-secondary" href="{{ products.previousPageUrl }}"><i class="bi bi-chevron-left"></i> Précédent</a>
+          @endif
+          @if(products.hasNextPage)
+            <a class="btn btn-sm btn-outline-secondary" href="{{ products.nextPageUrl }}">Suivant <i class="bi bi-chevron-right"></i></a>
+          @endif
+        </div>
+      </div>
+    </div>
+  @endslot
+
+@end

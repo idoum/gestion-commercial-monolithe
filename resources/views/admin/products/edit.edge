@@ -1,0 +1,98 @@
+{{-- @file resources/views/admin/products/edit.edge --}}
+{{-- @description Formulaire d’édition de produit. --}}
+@layout.app({ title: "Modifier produit" })
+
+  @slot('main')
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="h4 mb-0">Modifier produit #{{ product.id }}</h1>
+      <a class="btn btn-outline-secondary" href="/admin/products"><i class="bi bi-arrow-left"></i> Retour</a>
+    </div>
+
+    <div class="card p-4">
+      <form method="post" action="/admin/products/{{ product.id }}" novalidate>
+        {{ csrfField() }}
+        <input type="hidden" name="_method" value="PUT" />
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">SKU</label>
+            <input class="form-control" name="sku" value="{{ product.sku }}" required />
+            @if(flashErrors.get('sku')) <div class="text-danger small">@flash('sku')</div> @endif
+          </div>
+
+          <div class="col-md-8">
+            <label class="form-label">Nom</label>
+            <input class="form-control" name="name" value="{{ product.name }}" required />
+            @if(flashErrors.get('name')) <div class="text-danger small">@flash('name')</div> @endif
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3">{{ product.description }}</textarea>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Catégorie</label>
+            <select class="form-select" name="categoryId" required>
+              @each(c in categories)
+                <option value="{{ c.id }}" @if(product.categoryId === c.id) selected @endif>{{ c.name }}</option>
+              @endeach
+            </select>
+            @if(flashErrors.get('categoryId')) <div class="text-danger small">@flash('categoryId')</div> @endif
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Unité</label>
+            <select class="form-select" name="unitId" required>
+              @each(u in units)
+                <option value="{{ u.id }}" @if(product.unitId === u.id) selected @endif>{{ u.code }} — {{ u.label }}</option>
+              @endeach
+            </select>
+            @if(flashErrors.get('unitId')) <div class="text-danger small">@flash('unitId')</div> @endif
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Taxe (TVA)</label>
+            <select class="form-select" name="taxRateId" required>
+              @each(t in taxRates)
+                <option value="{{ t.id }}" @if(product.taxRateId === t.id) selected @endif>{{ t.label }} ({{ t.rate }}%)</option>
+              @endeach
+            </select>
+            @if(flashErrors.get('taxRateId')) <div class="text-danger small">@flash('taxRateId')</div> @endif
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Prix HT</label>
+            <input class="form-control" name="priceHt" type="number" step="0.01" min="0" value="{{ product.priceHt }}" required />
+            @if(flashErrors.get('priceHt')) <div class="text-danger small">@flash('priceHt')</div> @endif
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Stock (Qté)</label>
+            <input class="form-control" name="stockQty" type="number" step="0.001" min="0" value="{{ product.stockQty }}" required />
+            @if(flashErrors.get('stockQty')) <div class="text-danger small">@flash('stockQty')</div> @endif
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Image (URL)</label>
+            <input class="form-control" name="imageUrl" type="url" value="{{ product.imageUrl }}" />
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-check mt-4">
+              <input class="form-check-input" id="isActive" type="checkbox" name="isActive" @if(product.isActive) checked @endif />
+              <label class="form-check-label" for="isActive">Actif</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+          <button class="btn btn-primary">
+            <i class="bi bi-check-lg me-1"></i> Mettre à jour
+          </button>
+        </div>
+      </form>
+    </div>
+  @endslot
+
+@end

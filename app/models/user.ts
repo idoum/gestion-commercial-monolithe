@@ -1,20 +1,33 @@
 /**
  * @file app/models/user.ts
- * @description Modèle User (utilisateurs de l'application).
+ * @description Modèle User (utilisateurs de l'application) + AuthFinder (verifyCredentials).
  */
+import { compose } from '@adonisjs/core/helpers'
+import hash from '@adonisjs/core/services/hash'
+import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+
 import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations' // ✅ bon chemin
+import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import Role from './role.js'
 
-export default class User extends BaseModel {
+/**
+ * Mixin AuthFinder : ajoute User.verifyCredentials(email, password)
+ * et User.findForAuth(...) — hashing via le service "hash" (scrypt/argon, selon config).
+ */
+const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
+  uids: ['email'],
+  passwordColumnName: 'password',
+})
+
+export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
   declare email: string
 
-  // Ne pas sérialiser le mot de passe
+  // Masquer à la sérialisation
   @column({ serializeAs: null })
   declare password: string
 
@@ -24,7 +37,6 @@ export default class User extends BaseModel {
   @column()
   declare isActive: boolean
 
-  // Relation N:N avec Role
   @manyToMany(() => Role, {
     pivotTable: 'user_roles',
   })

@@ -3,11 +3,12 @@
 @layout.auth({ title: "Connexion" })
 
   @slot('main')
-    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xxl-5">
-      <div class="material-card p-4 p-md-5">
+    <!-- Demi-largeur ~: md:4, lg:3 (vs md:8, lg:6 avant) -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-3">
+      <div class="material-card auth-compact p-4 p-md-5">
         <!-- En-tête -->
-        <div class="text-center mb-4">
-          <div class="fw-semibold fs-4 text-body-emphasis">Sign in</div>
+        <div class="text-center mb-3">
+          <div class="material-title fw-semibold text-body-emphasis">Sign in</div>
           <div class="text-secondary">to continue to your account</div>
         </div>
 
@@ -23,7 +24,7 @@
         <form action="/login" method="post" novalidate>
           {{ csrfField() }}
 
-          <!-- Champ email -->
+          <!-- Email -->
           <div class="material-field">
             <i class="bi bi-envelope material-icon"></i>
             <input class="material-input" id="email" name="email" type="email" placeholder=" " autocomplete="username" required />
@@ -31,7 +32,7 @@
             <span class="material-bar"></span>
           </div>
 
-          <!-- Champ mot de passe -->
+          <!-- Mot de passe -->
           <div class="material-field">
             <i class="bi bi-lock material-icon"></i>
             <input class="material-input" id="password" name="password" type="password" placeholder=" " autocomplete="current-password" required />
@@ -58,13 +59,10 @@
           <!-- Séparateur -->
           <div class="divider text-uppercase small">or</div>
 
-          <!-- Boutons sociaux (visuel uniquement) -->
-          <div class="d-grid gap-2">
+          <!-- Bouton social (Facebook supprimé) -->
+          <div class="d-grid">
             <button type="button" class="btn btn-google btn-lg">
               <i class="bi bi-google me-2"></i> Continue with Google
-            </button>
-            <button type="button" class="btn btn-facebook btn-lg">
-              <i class="bi bi-facebook me-2"></i> Continue with Facebook
             </button>
           </div>
 
@@ -74,25 +72,6 @@
         </form>
       </div>
     </div>
-  @endslot
-
-  @slot('scripts')
-    <script>
-      // @file inline
-      // @description Toggle œil sur le mot de passe (si vous ajoutez l'icône dédiée)
-      document.addEventListener('DOMContentLoaded', function () {
-        const pwd = document.getElementById('password')
-        const toggle = document.querySelector('[data-toggle-password]')
-        if (pwd && toggle) {
-          toggle.addEventListener('click', () => {
-            const isPwd = pwd.type === 'password'
-            pwd.type = isPwd ? 'text' : 'password'
-            toggle.classList.toggle('bi-eye')
-            toggle.classList.toggle('bi-eye-slash')
-          })
-        }
-      })
-    </script>
   @endslot
 
 @end

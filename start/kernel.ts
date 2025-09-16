@@ -3,6 +3,7 @@
  * @description Middlewares globaux et nommés (Adonis v6).
  */
 import router from '@adonisjs/core/services/router'
+import server from '@adonisjs/core/services/server'
 
 /**
  * Middlewares nommés (à utiliser dans routes avec .use(middleware.x))
@@ -20,7 +21,7 @@ export const middleware = router.named({
  * - La SESSION doit être globale pour ctx.session / flash et le guard 'web'
  * - Shield (CSP/CSRF headers) si tu l'as configuré avant
  */
-router.use([
+server.use([
   () => import('#middleware/session_middleware'), // ⬅ ajouté par @adonisjs/session
   () => import('#middleware/shield_middleware'), // ⬅ garde-le si @adonisjs/shield est configuré
   () => import('@adonisjs/session/session_middleware'),
